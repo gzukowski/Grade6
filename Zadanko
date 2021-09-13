@@ -1,0 +1,113 @@
+import time
+import tkinter as tk
+
+
+#wymiary = int(input('Podaj wymiar: '))
+board =[]
+rows = []
+base = 0
+lista = []
+def listGenerator(wymiary):
+        for col in range(0,wymiary):
+            rows = []
+            for row in range(0,wymiary):
+                rows.append('-')
+            board.append(rows)
+        #print(rows)
+
+def zerosFiller():
+    iterator = 0
+    for row in range(0,wymiary):
+        #print(board[row], board[row][iterator])
+        board[row][iterator] = base
+        iterator = iterator +1
+    #print(board)
+
+def numberFiller():
+    for row in range (0,wymiary):
+        for element in range(0,wymiary-1):
+            if row == 0:
+                board[row][element+1] = int(board[row][element])+1
+                continue
+
+            if row == wymiary-1:
+                board[row][element] = wymiary-(element+1)
+                continue
+
+            if board[row][element] == 0:
+                board[row][element-1] = 1
+                board[row][element+1] = 1
+    pole = wymiary * wymiary
+    for sq in range (0,pole):
+        for row in range (0,wymiary-1):
+            for element in range(0,wymiary-1):
+
+
+                if board[row][element] == '-':
+
+                    if board[row][element+1] == '-':
+                        if board[row][element-1] != '-' and element != 0:
+                            board[row][element] = int(board[row][element-1])+1
+
+                    if board[row][element+1] != '-' and element == 0:
+                         board[row][element] = int(board[row][element+1])+1
+
+                    if board[row][element+1] != '-' and element != 0:
+                         board[row][element] = int(board[row][element+1])+1
+
+                    if board[row][element+1] == '-':
+                        continue
+
+                if element == wymiary-2 and board[row][wymiary-2] != '-':
+                        board[row][element+1] = int(board[row][element])+1
+
+
+
+
+
+file = open('C:\\Users\\Admin\\Desktop\\wynikiKwadratowe.txt','w')
+
+
+
+
+
+
+def saveTheBoard(board):
+    for row in range (0,wymiary-1):
+            for element in range(0,wymiary-1):
+                file.write('[')
+                file.write(str(board[row][element]))
+                file.write(']')
+                file.write(' ')
+
+            file.write('\n')
+
+
+
+
+
+def launch():
+    listGenerator(wymiary)
+    zerosFiller()
+    numberFiller()
+    saveTheBoard(board)
+
+
+okno = tk.Tk()
+okno.title('Oro totalne, Pani da celujący')
+okno.geometry('320x150')
+okno.resizable(False, False)
+
+def Click():
+    global wymiary
+    wymiary = int(entry.get())
+    launch()
+
+
+button = tk.Button(text='Create!', padx=30, pady=30, command=Click)
+
+entry = tk.Entry(bg='Blue', font=30)
+entry.place(width=320,height=50)
+button.pack(side=tk.BOTTOM)
+
+tk.mainloop()
